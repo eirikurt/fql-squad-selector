@@ -98,6 +98,7 @@ def filter_players(players: list[Player]) -> list[Player]:
 
 
 def print_players(players: list[Player]):
+    positions = ["gk", "def", "mid", "fwd"]
     formatted_players = [
         {
             "id": p["id"],
@@ -107,7 +108,7 @@ def print_players(players: list[Player]):
             "form": p["form"],
             "score": p["score"],
             "team_nr": p["team"],
-            "position": p["element_type"],
+            "position": positions[p["element_type"] - 1],
         }
         for p in players
     ]
