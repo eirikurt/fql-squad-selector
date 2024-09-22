@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "fpl-squad-selector"
+version = "0.1.0"
+description = "Scripts for picking an optimal Fantasy Premier League squad using dynamic programming."
+authors = ["Eiríkur Fannar Torfason <eirikur.torfason@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+httpx = "^0.27.2"
+tqdm = "^4.66.5"
+numpy = "^2.1.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
