@@ -1,4 +1,4 @@
-# fql-squad-selector
+# fpl-squad-selector
 
 These are scripts for picking an optimal [Fantasy Premier League](https://fantasy.premierleague.com/) squad using [dynamic programming](https://en.wikipedia.org/wiki/Dynamic_programming). This can come in handy when playing the wildcard token.
 
