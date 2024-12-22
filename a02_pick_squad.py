@@ -25,11 +25,11 @@ empty_positions = [1, 3, 4, 3]
 blacklisted_player_ids: list[int] = []
 
 # Your remaining budget in £ millions
-budget = 82.4
+budget = 82.9
 
 # How to score players. A simple predictor of future performance is how many points they accrue per game.
 # A more elaborate function, that takes future fixtures into account, would likely yield better results.
-scoring_function = lambda player: float(player["points_per_game"])
+utility_function = lambda player: float(player["points_per_game"])
 
 # We are only allowed 3 players from each team. If the script ends up picking more than that from one team,
 # then change this to the number of that team. For the 24/25 season, the team numbers are as follows:
@@ -65,7 +65,7 @@ def main():
 
     # Score the players
     for p in players:
-        p["score"] = scoring_function(p)
+        p["utility"] = utility_function(p)
 
     # Remove undesirable players from the selection pool
     filtered_players = filter_players(players)
@@ -87,7 +87,7 @@ def filter_players(players: list[Player]) -> list[Player]:
     return [
         p
         for p in players
-        if p["score"] > 0
+        if p["utility"] > 0
         and p["id"] not in blacklisted_player_ids
         and p["starts"] > 2  # Exclude few-game wonders
         and (
@@ -106,7 +106,7 @@ def print_players(players: list[Player]):
             "cost": p["now_cost"] / 10.0,
             "points": p["total_points"],
             "form": p["form"],
-            "score": p["score"],
+            "utility": p["utility"],
             "team_nr": p["team"],
             "position": positions[p["element_type"] - 1],
         }
@@ -161,13 +161,13 @@ def select_team(
         from_dominant_team = 1
 
     # Option A includes the current player, assuming that we can fit him in
-    value_a = 0.0
+    utility_a = 0.0
     selection_a: list[int] = []
     if cost <= budget_left and empty_places[position] > 0 and (dominant_players_left - from_dominant_team >= 0):
         # Fill remaining spots, assuming that we keep the current player
         updated_empty_places = empty_places.copy()
         updated_empty_places[position] = updated_empty_places[position] - 1
-        value, selection = select_team(
+        utility, selection = select_team(
             start_index + 1,
             budget_left - cost,
             player_list,
@@ -177,11 +177,11 @@ def select_team(
         )
 
         # Add the current player to the results
-        value_a = value + current_player["score"]
+        utility_a = utility + current_player["utility"]
         selection_a = selection + [start_index]
 
     # Option B omits the current player
-    value_b, selection_b = select_team(
+    utility_b, selection_b = select_team(
         start_index + 1,
         budget_left,
         player_list,
@@ -191,7 +191,7 @@ def select_team(
     )
 
     # Pick the better option
-    result = (value_a, selection_a) if value_a > value_b else (value_b, selection_b)
+    result = (utility_a, selection_a) if utility_a > utility_b else (utility_b, selection_b)
 
     cache[cache_index] = result
     return result

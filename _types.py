@@ -13,5 +13,5 @@ class Player(TypedDict):
     points_per_game: float
     chance_of_playing_next_round: int | None
     starts: int
-    score: float
+    utility: float
     # Loads more could be added, see /data/player_data.json for available attributes
