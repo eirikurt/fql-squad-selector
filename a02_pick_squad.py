@@ -22,7 +22,7 @@ empty_positions = [1, 3, 4, 3]
 #  - [351] to exclude Haaland
 #  - [328] to exclude Salah
 #  - [328, 351] to exclude Salah and Haaland
-blacklisted_player_ids: list[int] = []
+ignored_player_ids: list[int] = []
 
 # Your remaining budget in £ millions
 budget = 82.9
@@ -88,7 +88,7 @@ def filter_players(players: list[Player]) -> list[Player]:
         p
         for p in players
         if p["utility"] > 0
-        and p["id"] not in blacklisted_player_ids
+        and p["id"] not in ignored_player_ids
         and p["starts"] > 2  # Exclude few-game wonders
         and (
             p["chance_of_playing_next_round"] is None  # Sometimes not available
